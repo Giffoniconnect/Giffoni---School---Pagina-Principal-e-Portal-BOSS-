@@ -1,0 +1,83 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Dados de perfil e permissões dos usuários",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["SUPER_BOSS", "BOSS_ADMIN", "BOSS_FINANCEIRO", "BOSS_RH", "BOSS_MKT", "PROFESSOR", "ALUNO", "SUPORTE"] },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "HomeSection": {
+      "title": "Home Section",
+      "description": "Blocos dinâmicos da home pública controlados pelo BOSS",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "type": "string" },
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "content": { "type": "string" },
+        "order": { "type": "number" },
+        "isActive": { "type": "boolean" },
+        "ctaText": { "type": "string" },
+        "ctaLink": { "type": "string" },
+        "imageUrl": { "type": "string" }
+      },
+      "required": ["type", "order", "isActive"]
+    },
+    "Course": {
+      "title": "Course",
+      "description": "Cursos disponíveis na plataforma",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "slug": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "teacherId": { "type": "string" },
+        "thumbnailUrl": { "type": "string" },
+        "status": { "type": "string", "enum": ["draft", "published", "archived"] },
+        "category": { "type": "string" }
+      },
+      "required": ["title", "slug", "price", "status"]
+    },
+    "Enrollment": {
+      "title": "Enrollment",
+      "description": "Matrículas de alunos em cursos",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "courseId": { "type": "string" },
+        "enrolledAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["active", "suspended", "expired"] }
+      },
+      "required": ["userId", "courseId", "status"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "Perfis de usuários"
+    },
+    "home_sections/{sectionId}": {
+      "schema": "HomeSection",
+      "description": "Conteúdo dinâmico da Home Pública"
+    },
+    "courses/{courseId}": {
+      "schema": "Course",
+      "description": "Catálogo de cursos"
+    },
+    "enrollments/{enrollmentId}": {
+      "schema": "Enrollment",
+      "description": "Vínculos Aluno-Curso"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Giffoni School",
+  "description": "Plataforma educacional premium independente para transformação da advocacia, com gestão centralizada via BOSS School.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
