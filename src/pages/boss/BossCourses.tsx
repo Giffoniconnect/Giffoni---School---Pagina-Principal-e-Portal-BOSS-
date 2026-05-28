@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { collection, onSnapshot, query, orderBy, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { db, handleFirestoreError, OperationType } from '../../lib/firebase';
 import { Course } from '../../types';
 import { Plus, Trash2, Edit2, Search } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -16,6 +16,8 @@ export default function BossCourses() {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Course));
       setCourses(data);
       setLoading(false);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, 'courses');
     });
     return unsubscribe;
   }, []);
@@ -35,7 +37,7 @@ export default function BossCourses() {
       await addDoc(collection(db, 'courses'), newCourse);
       toast.success('Curso criado como rascunho');
     } catch (e) {
-      toast.error('Erro ao criar curso');
+      handleFirestoreError(e, OperationType.CREATE, 'courses');
     }
   };
 

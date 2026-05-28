@@ -17,6 +17,14 @@ import Home from './pages/public/Home';
 import Courses from './pages/public/Courses';
 import BossHomeManager from './pages/boss/BossHomeManager';
 import BossCourses from './pages/boss/BossCourses';
+import BossAccess from './pages/boss/BossAccess';
+import BossRegistration from './pages/boss/BossRegistration';
+import BossNewStudent from './pages/boss/BossNewStudent';
+import BossExistingStudent from './pages/boss/BossExistingStudent';
+import BossEnrollment from './pages/boss/BossEnrollment';
+import BossFinance from './pages/boss/BossFinance';
+import BossStudents from './pages/boss/BossStudents';
+import BossGeneralSettings from './pages/boss/BossGeneralSettings';
 
 const CourseDetails = () => {
   const { slug } = useParams();
@@ -151,20 +159,65 @@ export default function App() {
           <Route path="/cursos" element={<Courses />} />
           <Route path="/cursos/:slug" element={<CourseDetails />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/boss/acesso" element={<BossAccess />} />
 
           {/* BOSS Routes */}
           <Route path="/boss" element={
+            <Navigate to="/boss/visao-geral" replace />
+          } />
+
+          <Route path="/boss/visao-geral" element={
             <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN', 'BOSS_FINANCEIRO', 'BOSS_RH', 'BOSS_MKT']}>
               <BossLayout>
                 <BossOverview />
               </BossLayout>
             </ProtectedRoute>
           } />
-          
-          <Route path="/boss/home" element={
-            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN', 'BOSS_MKT']}>
+
+          <Route path="/boss/cadastro" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
               <BossLayout>
-                <BossHomeManager />
+                <BossRegistration />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/boss/cadastro/novo-aluno" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
+              <BossLayout>
+                <BossNewStudent />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/boss/cadastro/novo-aluno/matricular-curso" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
+              <BossLayout>
+                <BossEnrollment />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/boss/cadastro/ja-sou-aluno" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
+              <BossLayout>
+                <BossExistingStudent />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/boss/cadastro/ja-sou-aluno/matricular-curso" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
+              <BossLayout>
+                <BossEnrollment />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/boss/cadastro/matricula/financeiro" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN', 'BOSS_FINANCEIRO']}>
+              <BossLayout>
+                <BossFinance />
               </BossLayout>
             </ProtectedRoute>
           } />
@@ -173,6 +226,30 @@ export default function App() {
             <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
               <BossLayout>
                 <BossCourses />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/boss/alunos" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
+              <BossLayout>
+                <BossStudents />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/boss/configuracoes-gerais" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN', 'BOSS_MKT']}>
+              <BossLayout>
+                <BossGeneralSettings />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/boss/configuracoes-gerais/home-publica" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN', 'BOSS_MKT']}>
+              <BossLayout>
+                <BossHomeManager />
               </BossLayout>
             </ProtectedRoute>
           } />

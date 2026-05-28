@@ -1,6 +1,6 @@
 import { useState, useEffect, Fragment } from 'react';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { db, handleFirestoreError, OperationType } from '../../lib/firebase';
 import { HomeSection } from '../../types';
 import { motion } from 'motion/react';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
@@ -19,6 +19,8 @@ export default function Home() {
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setSections(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as HomeSection)));
       setLoading(false);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, 'home_sections');
     });
     return unsubscribe;
   }, []);

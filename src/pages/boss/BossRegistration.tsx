@@ -1,0 +1,82 @@
+import { Link } from 'react-router-dom';
+import { UserPlus, UserCheck, ArrowRight, Shield } from 'lucide-react';
+import { motion } from 'motion/react';
+
+export default function BossRegistration() {
+  return (
+    <div className="max-w-4xl mx-auto py-12 px-6">
+      {/* Retorno e Título */}
+      <div className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <span className="text-red-600 font-bold tracking-[0.3em] uppercase text-[10px] block mb-2">
+            Módulo de Admissão
+          </span>
+          <h1 className="text-4xl font-extrabold italic tracking-tighter uppercase text-slate-900 leading-none">
+            Central de <span className="text-slate-400">Cadastros</span>
+          </h1>
+        </div>
+        <Link 
+          to="/boss/visao-geral" 
+          className="text-slate-400 hover:text-slate-900 text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-colors group self-start"
+        >
+          <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" /> Painel Geral
+        </Link>
+      </div>
+
+      {/* Grid de Redirecionamento Estrito - APENAS 2 Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+        {/* Card 1: Novo Aluno */}
+        <motion.div 
+          whileHover={{ y: -6 }}
+          transition={{ duration: 0.3 }}
+          className="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between h-80 group"
+        >
+          <div>
+            <div className="w-14 h-14 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
+              <UserPlus size={24} />
+            </div>
+            <h3 className="text-2xl font-black uppercase tracking-tight italic text-slate-900 mb-3">
+              Novo Aluno
+            </h3>
+            <p className="text-slate-400 text-xs font-semibold leading-relaxed uppercase tracking-wider">
+              Admissão completa de novos membros. Cadastro de dados físicos, credenciais e primeira matrícula no sistema.
+            </p>
+          </div>
+          
+          <Link 
+            to="/boss/cadastro/novo-aluno"
+            className="w-full bg-slate-900 text-white hover:bg-red-600 font-black uppercase text-xs tracking-widest py-4 rounded-full flex items-center justify-center gap-2 transition-colors duration-300"
+          >
+            Acessar Fluxo <ArrowRight size={14} />
+          </Link>
+        </motion.div>
+
+        {/* Card 2: Já Sou Aluno */}
+        <motion.div 
+          whileHover={{ y: -6 }}
+          transition={{ duration: 0.3 }}
+          className="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between h-80 group"
+        >
+          <div>
+            <div className="w-14 h-14 bg-slate-100 text-slate-700 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
+              <UserCheck size={24} />
+            </div>
+            <h3 className="text-2xl font-black uppercase tracking-tight italic text-slate-900 mb-3">
+              Já Sou Aluno
+            </h3>
+            <p className="text-slate-400 text-xs font-semibold leading-relaxed uppercase tracking-wider">
+              Vincular novos métodos, cursos de extensão e registrar fluxo de pagamentos para alunos que já possuem conta ativa.
+            </p>
+          </div>
+          
+          <Link 
+            to="/boss/cadastro/ja-sou-aluno"
+            className="w-full bg-slate-900 text-white hover:bg-red-600 font-black uppercase text-xs tracking-widest py-4 rounded-full flex items-center justify-center gap-2 transition-colors duration-300"
+          >
+            Acessar Fluxo <ArrowRight size={14} />
+          </Link>
+        </motion.div>
+      </div>
+    </div>
+  );
+}

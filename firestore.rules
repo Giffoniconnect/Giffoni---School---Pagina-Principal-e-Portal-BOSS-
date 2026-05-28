@@ -12,9 +12,23 @@ service cloud.firestore {
     function isVerified() { return isSignedIn() && request.auth.token.email_verified == true; }
     function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
     function getProfile() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
-    function hasRole(role) { return isSignedIn() && getProfile().role == role; }
-    function isBoss() { return isSignedIn() && getProfile().role.matches('^BOSS_.*') || getProfile().role == 'SUPER_BOSS'; }
-    function isAdmin() { return isSignedIn() && (getProfile().role == 'SUPER_BOSS' || getProfile().role == 'BOSS_ADMIN'); }
+    function hasProfile() { return exists(/databases/$(database)/documents/users/$(request.auth.uid)); }
+    
+    // Check if user is a Boss (either by profile role or because they are the bootstrapped admin)
+    function isBoss() { 
+      return isSignedIn() && (
+        (request.auth.token.email == 'direito.rgr@gmail.com' && request.auth.token.email_verified == true) ||
+        (hasProfile() && (getProfile().role.matches('^BOSS_.*') || getProfile().role == 'SUPER_BOSS'))
+      );
+    }
+    
+    // Check if user is an Admin (either by profile role or because they are the bootstrapped admin)
+    function isAdmin() { 
+      return isSignedIn() && (
+        (request.auth.token.email == 'direito.rgr@gmail.com' && request.auth.token.email_verified == true) ||
+        (hasProfile() && (getProfile().role == 'SUPER_BOSS' || getProfile().role == 'BOSS_ADMIN'))
+      );
+    }
     
     function incoming() { return request.resource.data; }
     function existing() { return resource.data; }
@@ -27,20 +41,20 @@ service cloud.firestore {
       function isValidUser(data) {
         return data.uid == request.auth.uid 
           && data.email is string 
-          && data.role in ['ALUNO', 'PROFESSOR'] // Users can't self-assign BOSS roles
+          && (data.role in ['ALUNO', 'PROFESSOR'] || (request.auth.token.email == 'direito.rgr@gmail.com' && request.auth.token.email_verified == true))
           && data.keys().hasAll(['uid', 'email', 'role'])
           && data.keys().size() <= 10;
       }
 
       allow create: if isVerified() && request.auth.uid == userId && isValidUser(incoming());
       allow update: if isSignedIn() && request.auth.uid == userId 
-        && incoming().role == existing().role // Role is immutable for the user
+        && incoming().role == existing().role // Role is immutable for normal users
         && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoURL']);
     }
 
     // 3. Home Sections
     match /home_sections/{sectionId} {
-      allow read: if (existing().isActive == true) || isBoss();
+      allow read: if (resource != null && resource.data.isActive == true) || isBoss();
       allow write: if isBoss() && isValidId(sectionId);
       
       function isValidSection(data) {
@@ -54,8 +68,8 @@ service cloud.firestore {
 
     // 4. Courses
     match /courses/{courseId} {
-      allow get: if (existing().status == 'published') || isBoss();
-      allow list: if (resource.data.status == 'published') || isBoss();
+      allow get: if (resource != null && resource.data.status == 'published') || isBoss();
+      allow list: if (resource != null && resource.data.status == 'published') || isBoss();
       
       function isValidCourse(data) {
         return data.title is string && data.slug is string && data.price is number
@@ -67,10 +81,15 @@ service cloud.firestore {
 
     // 5. Enrollments
     match /enrollments/{enrollmentId} {
-      allow get: if isSignedIn() && (existing().userId == request.auth.uid || isBoss());
-      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isBoss());
-      
-      allow create: if isAdmin(); // Only system/admin can create enrollments for now (via server/stripe)
+      allow read, write: if isBoss();
+      allow get: if isSignedIn() && (existing() != null && (existing().studentId == request.auth.uid || isBoss()));
+      allow list: if isSignedIn() && (resource != null && (resource.data.studentId == request.auth.uid || isBoss()));
+      allow create: if isBoss();
+    }
+
+    // 6. Students Collection
+    match /students/{studentId} {
+      allow read, write: if isBoss();
     }
   }
 }

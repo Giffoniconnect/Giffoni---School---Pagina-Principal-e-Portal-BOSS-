@@ -60,6 +60,31 @@
         "status": { "type": "string", "enum": ["active", "suspended", "expired"] }
       },
       "required": ["userId", "courseId", "status"]
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Perfil cadastral de aluno para admissão corporativa",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string" },
+        "cpf": { "type": "string" },
+        "rg": { "type": "string" },
+        "birthDate": { "type": "string" },
+        "maritalStatus": { "type": "string" },
+        "profession": { "type": "string" },
+        "address": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "phone": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "socialMedia": { "type": "string" },
+        "internalNotes": { "type": "string" },
+        "loginEmail": { "type": "string", "format": "email" },
+        "password": { "type": "string" },
+        "statusAccess": { "type": "string", "enum": ["ativo", "bloqueado"] },
+        "registeredAt": { "type": "string", "format": "date-time" },
+        "hasActiveEnrollment": { "type": "boolean" }
+      },
+      "required": ["fullName", "cpf", "birthDate", "email", "loginEmail", "password"]
     }
   },
   "firestore": {
@@ -78,6 +103,10 @@
     "enrollments/{enrollmentId}": {
       "schema": "Enrollment",
       "description": "Vínculos Aluno-Curso"
+    },
+    "students/{studentId}": {
+      "schema": "Student",
+      "description": "Fichas Cadastrais de Alunos"
     }
   }
 }

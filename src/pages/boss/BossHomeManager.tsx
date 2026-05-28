@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { collection, onSnapshot, query, orderBy, addDoc, updateDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../../lib/firebase';
+import { db, handleFirestoreError, OperationType } from '../../lib/firebase';
 import { HomeSection } from '../../types';
 import { Plus, Trash2, Edit2, Eye, EyeOff, GripVertical } from 'lucide-react';
 import { motion, Reorder } from 'motion/react';
@@ -15,6 +15,8 @@ export default function BossHomeManager() {
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as HomeSection));
       setSections(data);
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, 'home_sections');
     });
     return unsubscribe;
   }, []);
@@ -24,14 +26,18 @@ export default function BossHomeManager() {
       await updateDoc(doc(db, 'home_sections', section.id), { isActive: !section.isActive });
       toast.success(`Seção ${!section.isActive ? 'ativada' : 'desativada'}`);
     } catch (e) {
-      toast.error('Erro ao atualizar seção');
+      handleFirestoreError(e, OperationType.UPDATE, `home_sections/${section.id}`);
     }
   };
 
   const deleteSection = async (id: string) => {
     if (window.confirm('Tem certeza?')) {
-      await deleteDoc(doc(db, 'home_sections', id));
-      toast.success('Seção removida');
+      try {
+        await deleteDoc(doc(db, 'home_sections', id));
+        toast.success('Seção removida');
+      } catch (e) {
+        handleFirestoreError(e, OperationType.DELETE, `home_sections/${id}`);
+      }
     }
   };
 
@@ -44,8 +50,12 @@ export default function BossHomeManager() {
       isActive: false,
       createdAt: serverTimestamp()
     };
-    await addDoc(collection(db, 'home_sections'), newSection);
-    toast.success('Seção adicionada');
+    try {
+      await addDoc(collection(db, 'home_sections'), newSection);
+      toast.success('Seção adicionada');
+    } catch (e) {
+      handleFirestoreError(e, OperationType.CREATE, 'home_sections');
+    }
   };
 
   return (
