@@ -25,6 +25,10 @@ import BossEnrollment from './pages/boss/BossEnrollment';
 import BossFinance from './pages/boss/BossFinance';
 import BossStudents from './pages/boss/BossStudents';
 import BossGeneralSettings from './pages/boss/BossGeneralSettings';
+import BossCadastroAlunos from './pages/boss/BossCadastroAlunos';
+import BossCadastroProfessores from './pages/boss/BossCadastroProfessores';
+import BossNewProfessor from './pages/boss/BossNewProfessor';
+import BossExistingProfessor from './pages/boss/BossExistingProfessor';
 
 const CourseDetails = () => {
   const { slug } = useParams();
@@ -182,6 +186,14 @@ export default function App() {
             </ProtectedRoute>
           } />
 
+          <Route path="/boss/cadastro/alunos" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
+              <BossLayout>
+                <BossCadastroAlunos />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
           <Route path="/boss/cadastro/novo-aluno" element={
             <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
               <BossLayout>
@@ -190,7 +202,23 @@ export default function App() {
             </ProtectedRoute>
           } />
 
+          <Route path="/boss/cadastro/novo-cadastro-aluno" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
+              <BossLayout>
+                <BossNewStudent />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
           <Route path="/boss/cadastro/novo-aluno/matricular-curso" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
+              <BossLayout>
+                <BossEnrollment />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/boss/cadastro/novo-cadastro-aluno/matricular-curso" element={
             <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
               <BossLayout>
                 <BossEnrollment />
@@ -210,6 +238,30 @@ export default function App() {
             <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
               <BossLayout>
                 <BossEnrollment />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/boss/cadastro/professores" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
+              <BossLayout>
+                <BossCadastroProfessores />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/boss/cadastro/novo-cadastro-professor" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
+              <BossLayout>
+                <BossNewProfessor />
+              </BossLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/boss/cadastro/ja-sou-professor" element={
+            <ProtectedRoute allowedRoles={['SUPER_BOSS', 'BOSS_ADMIN']}>
+              <BossLayout>
+                <BossExistingProfessor />
               </BossLayout>
             </ProtectedRoute>
           } />

@@ -1,82 +1,87 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, GraduationCap, Presentation } from 'lucide-react';
+import { ArrowRight, UserPlus, Search } from 'lucide-react';
 import { motion } from 'motion/react';
 import RegistrationBreadcrumbs from '../../components/RegistrationBreadcrumbs';
 
-export default function BossRegistration() {
+export default function BossCadastroAlunos() {
   return (
     <div className="max-w-4xl mx-auto py-12 px-6">
       {/* Breadcrumb */}
       <div className="mb-4">
-        <RegistrationBreadcrumbs items={[{ label: 'Central de Cadastros' }]} />
+        <RegistrationBreadcrumbs 
+          items={[
+            { label: 'Central de Cadastros', to: '/boss/cadastro' },
+            { label: 'Cadastro de Alunos' }
+          ]} 
+        />
       </div>
 
       {/* Retorno e Título */}
       <div className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <span className="text-red-600 font-bold tracking-[0.3em] uppercase text-[10px] block mb-2">
-            Módulo de Admissão & Gestão
+            Módulo de Admissão de Alunos
           </span>
           <h1 className="text-4xl font-extrabold italic tracking-tighter uppercase text-slate-900 leading-none">
-            Central de <span className="text-slate-400">Cadastros</span>
+            Cadastro de <span className="text-red-600">Alunos</span>
           </h1>
         </div>
         <Link 
-          to="/boss/visao-geral" 
+          to="/boss/cadastro" 
           className="text-slate-400 hover:text-slate-900 text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-colors group self-start"
         >
-          <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" /> Painel Geral
+          <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" /> Central de Cadastros
         </Link>
       </div>
 
-      {/* Grid de Seleção Principal - Alunos vs Professores */}
+      {/* Grid de Redirecionamento Estrito - 2 Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-        {/* Card 1: Cadastro de Alunos */}
+        {/* Card 1: Novo Aluno (Cadastrar) */}
         <motion.div 
           whileHover={{ y: -6 }}
           transition={{ duration: 0.3 }}
           className="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between h-80 group cursor-pointer"
         >
-          <Link to="/boss/cadastro/alunos" className="flex flex-col justify-between h-full w-full">
+          <Link to="/boss/cadastro/novo-cadastro-aluno" className="flex flex-col justify-between h-full w-full">
             <div>
               <div className="w-14 h-14 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
-                <GraduationCap size={24} />
+                <UserPlus size={24} />
               </div>
               <h3 className="text-2xl font-black uppercase tracking-tight italic text-slate-900 mb-3 flex items-center gap-2">
-                🎓 Cadastro de Alunos
+                ➕ Novo Aluno
               </h3>
               <p className="text-slate-400 text-xs font-semibold leading-relaxed uppercase tracking-wider">
-                Gerencie novos alunos e alunos já cadastrados. Admissão completa, portabilidade e inscrições ativas.
+                Realizar novo cadastro de aluno. Admissão completa de novos membros. Cadastro de dados físicos e credenciais.
               </p>
             </div>
             
             <div className="w-full bg-slate-900 text-white group-hover:bg-red-600 font-black uppercase text-xs tracking-widest py-4 rounded-full flex items-center justify-center gap-2 transition-colors duration-300 mt-4">
-              Acessar <ArrowRight size={14} />
+              Cadastrar <ArrowRight size={14} />
             </div>
           </Link>
         </motion.div>
 
-        {/* Card 2: Cadastro de Professores */}
+        {/* Card 2: Já Sou Aluno (Localizar) */}
         <motion.div 
           whileHover={{ y: -6 }}
           transition={{ duration: 0.3 }}
           className="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm hover:shadow-xl transition-all flex flex-col justify-between h-80 group cursor-pointer"
         >
-          <Link to="/boss/cadastro/professores" className="flex flex-col justify-between h-full w-full">
+          <Link to="/boss/cadastro/ja-sou-aluno" className="flex flex-col justify-between h-full w-full">
             <div>
               <div className="w-14 h-14 bg-slate-100 text-slate-700 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300">
-                <Presentation size={24} />
+                <Search size={24} />
               </div>
               <h3 className="text-2xl font-black uppercase tracking-tight italic text-slate-900 mb-3 flex items-center gap-2">
-                👨‍🏫 Cadastro de Professores
+                🔎 Já Sou Aluno
               </h3>
               <p className="text-slate-400 text-xs font-semibold leading-relaxed uppercase tracking-wider">
-                Gerencie novos professores e professores já cadastrados. Cadastro de especialidades, comissões e portal.
+                Localizar cadastro já existente. Vincular novos métodos, cursos de extensão e registrar fluxo de pagamentos.
               </p>
             </div>
             
             <div className="w-full bg-slate-900 text-white group-hover:bg-red-600 font-black uppercase text-xs tracking-widest py-4 rounded-full flex items-center justify-center gap-2 transition-colors duration-300 mt-4">
-              Acessar <ArrowRight size={14} />
+              Localizar <ArrowRight size={14} />
             </div>
           </Link>
         </motion.div>
